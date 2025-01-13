@@ -332,6 +332,10 @@ reg.exe add "HKEY_CURRENT_USER\Control Panel\Desktop" /v "JPEGImportQuality" /t 
 reg.exe add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "EnableLUA" /t REG_DWORD /d 0 /f
 reg.exe add "HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Policies\System" /v "EnableLUA" /t REG_DWORD /d 0 /f
 
+::Delete DevHome*
+PowerShell "Get-AppxPackage -AllUsers -PackageTypeFilter Bundle -Name "*Windows.DevHome*" | Remove-AppxPackage -AllUsers"
+Get-AppxPackage -AllUsers -PackageTypeFilter Bundle -Name "*Windows.DevHome*” | Remove-AppxPackage -AllUsers
+
 ::Services settings::
 powershell.exe set-executionpolicy remotesigned
 powershell.exe Set-Service -Name 'DiagTrack' -StartupType Disabled -ErrorAction Continue
