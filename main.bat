@@ -115,6 +115,7 @@ reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\DeviceGuard" /v EnableVirtual
 reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\DeviceGuard" /v RequirePlatformSecurityFeatures /t REG_DWORD /d 0 /f >nul 2>&1
 reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Lsa" /v LsaCfgFlags /t REG_DWORD /d 0 /f >nul 2>&1
 reg.exe add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard" /v LsaCfgFlags /t REG_DWORD /d 0 /f >nul 2>&1
+bcdedit /set hypervisorlaunchtype auto 
 echo  [%DATE% %TIME%] Optimized Security Settings >> "%LOGFILE%"
 
 :: Privacy & Telemetry
@@ -427,3 +428,4 @@ echo   Log File Created: Optimization_Log.txt
 echo   Please restart your computer for all changes to take effect.
 echo  ============================================================
 pause
+
