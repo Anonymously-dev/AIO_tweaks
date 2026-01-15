@@ -218,7 +218,7 @@ reg.exe add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /
 :: Privacy, Suggestions & Telemetry
 reg.exe add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications" /v GlobalUserDisabled /t REG_DWORD /d 1 /f >nul 2>&1
 reg.exe add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v Start_TrackDocs /t REG_DWORD /d 1 /f >nul 2>&1
-reg.exe add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v Start_TrackProgs /t REG_DWORD /d 0 /f >nul 2>&1
+reg.exe add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v Start_TrackProgs /t REG_DWORD /d 1 /f >nul 2>&1
 reg.exe add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\AppDiagnostics" /v AppDiagnosticsEnabled /t REG_DWORD /d 0 /f >nul 2>&1
 reg.exe add "HKCU\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v DisableTailoredExperiencesWithDiagnosticData /t REG_DWORD /d 1 /f >nul 2>&1
 reg.exe add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v ShowSyncProviderNotifications /t REG_DWORD /d 0 /f >nul 2>&1
@@ -239,6 +239,21 @@ reg.exe add "HKCU\Software\Microsoft\Input\TIPC" /v "Enabled" /t REG_DWORD /d 0 
 reg.exe add "HKCU\SOFTWARE\Microsoft\Siuf\Rules" /v "NumberOfSIUFInPeriod" /t REG_DWORD /d 0 /f >nul 2>&1
 reg.exe delete "HKCU\SOFTWARE\Microsoft\Siuf\Rules" /v "PeriodInNanoSeconds" /f >nul 2>&1
 reg.exe add "HKCU\Software\Policies\Microsoft\Windows\WindowsCopilot" /v "TurnOffWindowsCopilot" /t REG_DWORD /d 1 /f >nul 2>&1
+
+:: Disable Windows AI background data analysis (Recall / future AI indexing)
+reg.exe add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AI" /v "DisableAIDataAnalysis" /t REG_DWORD /d 1 /f >nul 2>&1
+
+:: Disable Windows Device Insights (cloud-driven UX experiments & nudges)
+reg.exe add "HKLM\SOFTWARE\Policies\Microsoft\Windows\System" /v "DisableDeviceInsights" /t REG_DWORD /d 1 /f >nul 2>&1
+
+:: Disable Explorer AI-backed search & suggestion pipeline
+reg.exe add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Explorer" /v "DisableSearchSuggestions" /t REG_DWORD /d 1 /f >nul 2>&1
+
+:: Edge – Disable experimental and cosmetic AI features
+reg.exe add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "EnableExperimentalAI" /t REG_DWORD /d 0 /f >nul 2>&1
+reg.exe add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "EnableAIGeneratedThemes" /t REG_DWORD /d 0 /f >nul 2>&1
+
+echo  [%DATE% %TIME%] Added Extra AI & Telemetry Hardening >> "%LOGFILE%"
 
 :: Content Delivery Manager
 reg.exe add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "ContentDeliveryAllowed" /t REG_DWORD /d 0 /f >nul 2>&1
@@ -262,6 +277,7 @@ reg.exe add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManag
 reg.exe add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SystemPaneSuggestionsEnabled" /t REG_DWORD /d 0 /f >nul 2>&1
 reg.exe delete "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\Subscriptions" /f >nul 2>&1
 reg.exe delete "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /f >nul 2>&1
+reg.exe add "HKLM\SOFTWARE\Policies\Microsoft\Windows\System" /v EnableCdp /t REG_DWORD /d 1 /f
 
 :: Notifications, Tips & Mobile
 reg.exe add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "Start_IrisRecommendations" /t REG_DWORD /d 0 /f >nul 2>&1
@@ -271,6 +287,7 @@ reg.exe add "HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settin
 reg.exe add "HKCU\Software\Microsoft\Windows\CurrentVersion\Mobility" /v "OptedIn" /t REG_DWORD /d 0 /f >nul 2>&1
 reg.exe add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "Start_AccountNotifications" /t REG_DWORD /d 0 /f >nul 2>&1
 reg.exe add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.SystemToast.BackupReminder" /v "Enabled" /t REG_DWORD /d 0 /f >nul 2>&1
+
 
 :: GameDVR
 reg.exe add "HKCU\System\GameConfigStore" /v GameDVR_FSEBehavior /t REG_DWORD /d 2 /f >nul 2>&1
@@ -417,7 +434,7 @@ echo  [5/5] Finalizing...
 
 :: Restore UAC to prevent app breakage (Store, Calculator, etc.)
 reg.exe add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "EnableLUA" /t REG_DWORD /d 1 /f >nul 2>&1
-reg.exe add "HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Policies\System" /v "EnableLUA" /t REG_DWORD /d 1 /f >nul 2>&1
+::reg.exe add "HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Policies\System" /v "EnableLUA" /t REG_DWORD /d 1 /f >nul 2>&1
 
 echo  [%DATE% %TIME%] Optimization Complete. >> "%LOGFILE%"
 
@@ -428,4 +445,3 @@ echo   Log File Created: Optimization_Log.txt
 echo   Please restart your computer for all changes to take effect.
 echo  ============================================================
 pause
-
